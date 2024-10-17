@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
 {
     Rigidbody rb;
     SpriteRenderer sr;
+    private Animator anim;
 
     public float upForce = 100;
     public float speed = 1500;
@@ -24,6 +25,7 @@ public class Movement : MonoBehaviour
     {
             rb = GetComponent<Rigidbody>();
             sr = GetComponentInChildren<SpriteRenderer>();
+            anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -39,6 +41,15 @@ public class Movement : MonoBehaviour
         else if(moveHorizontal < 0)
         {
             sr.flipX = true;
+        }
+
+        if (moveHorizontal ==0)
+        {
+            anim.SetBool("IsRunning", false);
+        }
+        else
+        {
+            anim.SetBool("IsRunning", true);
         }
 
         if (Input.GetKeyDown(KeyCode.Space)&& isGrounded)
