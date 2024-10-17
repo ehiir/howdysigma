@@ -8,7 +8,8 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public Rigidbody rb;
+    Rigidbody rb;
+    SpriteRenderer sr;
 
     public float upForce = 100;
     public float speed = 1500;
@@ -22,6 +23,7 @@ public class Movement : MonoBehaviour
     void Start()
     {
             rb = GetComponent<Rigidbody>();
+            sr = GetComponentInChildren<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -29,6 +31,15 @@ public class Movement : MonoBehaviour
     {
         isLeftShift = Input.GetKey(KeyCode.LeftShift);
         moveHorizontal = Input.GetAxis("Horizontal");
+
+        if(moveHorizontal > 0)
+        {
+            sr.flipX = false;
+        }
+        else if(moveHorizontal < 0)
+        {
+            sr.flipX = true;
+        }
 
         if (Input.GetKeyDown(KeyCode.Space)&& isGrounded)
         {
