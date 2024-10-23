@@ -1,16 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 [RequireComponent(typeof(Rigidbody))]
-
 public class Movement : MonoBehaviour
 {
     Rigidbody rb;
     SpriteRenderer sr;
-    private Animator anim;
+    Animator anim;
 
     public float upForce = 100;
     public float speed = 1500;
@@ -19,22 +17,22 @@ public class Movement : MonoBehaviour
     public bool isGrounded = false;
     bool isLeftShift;
     float moveHorizontal;
+    float moveVertical;
 
-    // Start is called before the first frame update
     void Start()
     {
-            rb = GetComponent<Rigidbody>();
-            sr = GetComponentInChildren<SpriteRenderer>();
-            anim = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody>();
+        sr = GetComponentInChildren<SpriteRenderer>();
+        anim = GetComponentInChildren<Animator>();
     }
-
-    // Update is called once per frame
     void Update()
     {
         isLeftShift = Input.GetKey(KeyCode.LeftShift);
+        //Input.GetAxis("Vertical");
         moveHorizontal = Input.GetAxis("Horizontal");
+        moveVertical = Input.GetAxis ("Vertical");
 
-        if(moveHorizontal > 0)
+        if (moveHorizontal > 0)
         {
             sr.flipX = false;
         }
@@ -43,7 +41,7 @@ public class Movement : MonoBehaviour
             sr.flipX = true;
         }
 
-        if (moveHorizontal ==0)
+        if (moveHorizontal == 0)
         {
             anim.SetBool("IsRunning", false);
         }
@@ -52,7 +50,18 @@ public class Movement : MonoBehaviour
             anim.SetBool("IsRunning", true);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)&& isGrounded)
+
+        if (isGrounded)
+        {
+            anim.SetBool("IsJumping", false);
+        }
+        else
+        {
+            anim.SetBool("IsJumping", true);
+        }
+
+        //jump
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(Vector3.up * upForce);
             isGrounded = false;
@@ -61,22 +70,22 @@ public class Movement : MonoBehaviour
     }
 
 
-
     private void FixedUpdate()
+     
     {
-        if (isLeftShift)
-        {
-            rb.velocity = new Vector3(moveHorizontal * runSpeed * Time.deltaTime, rb.velocity.y,0);
-        }
-        else 
-        {
-            rb.velocity = new Vector3(moveHorizontal * speed * Time.deltaTime, rb.velocity.y,0);
-        }
+        
+        float currentSpeed = isLeftShift ? runSpeed : speed;
 
+       
+        rb.velocity = new Vector3(moveHorizontal * currentSpeed * Time.deltaTime, rb.velocity.y, moveVertical * currentSpeed * Time.deltaTime);
     }
+
+
+
 
     private void OnCollisionEnter(Collision collision)
     {
         isGrounded = true;
     }
-}
+    }
+
