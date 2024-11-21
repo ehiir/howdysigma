@@ -6,6 +6,7 @@ public class MenuController : MonoBehaviour
 {
 
     public GameObject menuPanel;
+    public Movement playerMovement;
 
     public void Update()
     {
@@ -16,7 +17,7 @@ public class MenuController : MonoBehaviour
     }
     public void NewGame()
     {
-
+        new SaveData();
     }
 
 
@@ -31,9 +32,9 @@ public class MenuController : MonoBehaviour
     }
 
     public void Save()
-    { 
-    
-    
+    {
+        playerMovement.Save();
+        DataSerializer.Save();
     
     }
 }

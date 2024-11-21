@@ -87,5 +87,13 @@ public class Movement : MonoBehaviour
     {
         isGrounded = true;
     }
+
+    public void Save()
+    {
+        Debug.Log(SaveData.instance.playerX);
+        SaveData.instance.playerX = transform.position.x;
+        SaveData.instance.playerY = transform.position.y;
+        SaveData.instance.playerZ = transform.position.z;
+    }
     }
 
